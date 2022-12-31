@@ -43,9 +43,9 @@ typedef struct ErrorDescription_ ErrorDescription;
 struct RingBuffer_
 {
 	ErrorDescription errors[RING_BUFFER_SIZE];
-	int head;
-	int tail;
-	int count;
+	size_t head;
+	size_t tail;
+	size_t count;
 };
 
 typedef struct RingBuffer_ RingBuffer;
@@ -93,12 +93,3 @@ size_t ringBufferCount(const RingBuffer* rb);
  * This function clear ring buffer
  */
 void ringBufferClear(RingBuffer* rb);
-
-/**
- * @brief Function to get hash value from string
- *
- * This function calculates hash value from string with djb2 algorithm
- * @param str Pointer to string to hash
- * @return uint32_t Return hash value of string
- */
-uint32_t hash_string(const char* str);

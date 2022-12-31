@@ -18,7 +18,7 @@
     <ClCompile Include="main.c">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="ErrorHandling.c">
+    <ClCompile Include="error_ringbuffer.c">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="motor.c">
@@ -32,13 +32,13 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ErrorMacros_config.h">
+    <ClInclude Include="error_macros_config.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="ErrorMacros.h">
+    <ClInclude Include="error_macros.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="ErrorHandling.h">
+    <ClInclude Include="error_ringbuffer.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="motor.h">

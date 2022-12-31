@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include "ErrorMacros_config.h"
+#include "error_macros_config.h"
 
 /* This function may print info about error and save this information to NVRAM memory for future use in diagnostic purposes
  * May be differ for debug and release build

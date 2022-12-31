@@ -127,16 +127,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ErrorHandling.c" />
+    <ClCompile Include="error_ringbuffer.c" />
     <ClCompile Include="error_handle.c" />
     <ClCompile Include="led.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="motor.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ErrorHandling.h" />
-    <ClInclude Include="ErrorMacros.h" />
-    <ClInclude Include="ErrorMacros_config.h" />
+    <ClInclude Include="error_ringbuffer.h" />
+    <ClInclude Include="error_macros.h" />
+    <ClInclude Include="error_macros_config.h" />
     <ClInclude Include="error_handle.h" />
     <ClInclude Include="led.h" />
     <ClInclude Include="motor.h" />

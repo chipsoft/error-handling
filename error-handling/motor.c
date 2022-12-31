@@ -25,7 +25,6 @@
 #error MODULE_ID already defined. Check MODULE_ID in other files!
 #endif
 
-#include "ErrorHandling.h"
 #include "error_handle.h"
 
 /*

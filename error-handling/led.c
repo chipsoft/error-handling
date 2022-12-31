@@ -26,8 +26,7 @@
 #endif
 
 #include <stdbool.h>
-#include "ErrorHandling.h"
-#include "ErrorMacros.h"
+#include "error_macros.h"
 #include "error_handle.h"
 
 /*

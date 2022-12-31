@@ -17,8 +17,8 @@
  *   License along with Box.  If not, see <http://www.gnu.org/licenses/>.   *
  ****************************************************************************/
 
-#include "ErrorHandling.h"
-#include "ErrorMacros.h"
+#include "error_ringbuffer.h"
+#include "error_macros.h"
 
 static void ringBufferAdd_(RingBuffer* rb, ErrorDescription error)
 {
@@ -61,17 +61,8 @@ size_t ringBufferCount(const RingBuffer* rb)
 
 void ringBufferClear(RingBuffer* rb)
 {
-	ASSERT(rb);
+	ASSERT(rb)
 	rb->head = 0;
 	rb->tail = 0;
 	rb->count = 0;
-}
-
-uint32_t hash_string(const char* str)
-{
-	uint32_t hash = 5381;
-	char c;
-	while ((c = *str++))
-		hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
-	return hash;
 }

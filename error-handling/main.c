@@ -20,8 +20,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "ErrorHandling.h"
-#include "ErrorMacros.h"
+#include "error_ringbuffer.h"
+#include "error_macros.h"
 #include "error_handle.h"
 #include "led.h"
 #include "motor.h"

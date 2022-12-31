@@ -19,8 +19,7 @@
 
 #pragma once
 #include <stdint.h>
-
-#include "ErrorHandling.h"
+#include "error_ringbuffer.h"
 
 /**
 * @brief Error module initialization function
@@ -61,4 +60,12 @@ size_t errorCount(void);
 */
 void errorDeinit(void);
 
+/**
+ * @brief Function to get hash value from string
+ *
+ * This function calculates hash value from string with djb2 algorithm
+ * @param str Pointer to string to hash
+ * @return uint32_t Return hash value of string
+ */
+uint32_t hash_string(const char* str);
 

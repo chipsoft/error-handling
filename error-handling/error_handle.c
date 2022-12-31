@@ -25,7 +25,7 @@
 #error MODULE_ID already defined. Check MODULE_ID in other files!
 #endif
 
-#include "ErrorHandling.h"
+#include "error_ringbuffer.h"
 
 /* Ring buffer for error description list */
 static RingBuffer ringBufferErrorList;
@@ -56,6 +56,15 @@ size_t errorCount(void)
 void errorDeinit(void)
 {
 	
+}
+
+uint32_t hash_string(const char* str)
+{
+	uint32_t hash = 5381;
+	char c;
+	while ((c = *str++))
+		hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
+	return hash;
 }
 
 #undef MODULE_ID
