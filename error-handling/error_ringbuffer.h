@@ -20,6 +20,7 @@
 #pragma once
 #include <stdint.h>
 
+/* Number of elements in ring buffer */
 #define RING_BUFFER_SIZE 100
 
 /**
@@ -29,9 +30,9 @@
  */
 struct ErrorDescription_
 {
-	uint32_t timestamp; /* Time when error is occur */
-	uint32_t moduleId;  /* Module Id */
-	uint16_t errorCode; /* Error code corresponding to the module */
+	uint32_t timestamp; /**< Time when error is occur#timestamp. */
+	uint32_t moduleId;  /**< Module Id#moduleId. */
+	uint16_t errorCode; /**< Error code corresponding to the module#errorCode. */
 };
 
 typedef struct ErrorDescription_ ErrorDescription;
@@ -42,10 +43,10 @@ typedef struct ErrorDescription_ ErrorDescription;
  */
 struct RingBuffer_
 {
-	ErrorDescription errors[RING_BUFFER_SIZE];
-	size_t head;
-	size_t tail;
-	size_t count;
+	ErrorDescription errors[RING_BUFFER_SIZE]; /**< Error description array#errors. */
+	size_t head; /**< Pointer to head#head. */
+	size_t tail; /**< Pointer to tail#tail. */
+	size_t count; /**< Number of using elements#count. */
 };
 
 typedef struct RingBuffer_ RingBuffer;
