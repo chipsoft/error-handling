@@ -17,61 +17,41 @@
  *   License along with Box.  If not, see <http://www.gnu.org/licenses/>.   *
  ****************************************************************************/
 
+/* Define MODULE_ID_MACROS macros */
+/* Macros MODULE_ID_MACROS should not be defined! We check this condition */
+#ifndef MODULE_ID
+#define MODULE_ID (hash_string("led.c"))
+#else
+#error MODULE_ID already defined. Check MODULE_ID in other files!
+#endif
+
+#include <stdbool.h>
 #include "ErrorHandling.h"
 #include "ErrorMacros.h"
+#include "error_handle.h"
 
-static void ringBufferAdd_(RingBuffer* rb, ErrorDescription error)
+/*
+ * Define all error codes for LED module here
+ */
+enum ErrorCode 
 {
-	ASSERT(rb)
-	rb->errors[rb->tail] = error;
-	rb->tail = (rb->tail + 1) % RING_BUFFER_SIZE;
-	rb->count++;
+	ERROR_LED_UNDEFINED_STATE = 0,
+	ERROR_LED_NOT_INITIALIZED,
+	ERROR_LED_IS_BROKEN,
+};
+
+void ledInit(void)
+{
+	errorAdd(0, MODULE_ID, (uint16_t)ERROR_LED_IS_BROKEN);
+}
+void ledSetState(bool state)
+{
+	errorAdd(0, MODULE_ID, (uint16_t)ERROR_LED_UNDEFINED_STATE);
 }
 
-void ringBufferInit(RingBuffer* rb)
+void ledDeinit(void)
 {
-	ASSERT(rb)
-	rb->head = 0;
-	rb->tail = 0;
-	rb->count = 0;
+	TODO("Implement ledDeinit");
 }
 
-void ringBufferAdd(RingBuffer* rb, uint32_t timestamp, uint32_t moduleId, uint16_t errorCode)
-{
-	ASSERT(rb);
-	ErrorDescription error = { .timestamp = timestamp, .moduleId = moduleId, .errorCode = errorCode };
-	ringBufferAdd_(rb, error);
-}
-
-ErrorDescription* ringBufferFetch(RingBuffer* rb)
-{
-	ASSERT(rb)
-	if (rb->head == rb->tail) return NULL;
-	ErrorDescription* error = &rb->errors[rb->head];
-	rb->head = (rb->head + 1) % RING_BUFFER_SIZE;
-	rb->count--;
-	return error;
-}
-
-size_t ringBufferCount(const RingBuffer* rb)
-{
-	ASSERT(rb)
-	return rb->count;
-}
-
-void ringBufferClear(RingBuffer* rb)
-{
-	ASSERT(rb);
-	rb->head = 0;
-	rb->tail = 0;
-	rb->count = 0;
-}
-
-uint32_t hash_string(const char* str)
-{
-	uint32_t hash = 5381;
-	char c;
-	while ((c = *str++))
-		hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
-	return hash;
-}
+#undef MODULE_ID

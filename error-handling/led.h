@@ -17,61 +17,28 @@
  *   License along with Box.  If not, see <http://www.gnu.org/licenses/>.   *
  ****************************************************************************/
 
-#include "ErrorHandling.h"
-#include "ErrorMacros.h"
+#pragma once
 
-static void ringBufferAdd_(RingBuffer* rb, ErrorDescription error)
-{
-	ASSERT(rb)
-	rb->errors[rb->tail] = error;
-	rb->tail = (rb->tail + 1) % RING_BUFFER_SIZE;
-	rb->count++;
-}
+#include <stdbool.h>
 
-void ringBufferInit(RingBuffer* rb)
-{
-	ASSERT(rb)
-	rb->head = 0;
-	rb->tail = 0;
-	rb->count = 0;
-}
+ /**
+ * @brief LED initialization function
+ *
+ * Run this function before using LED
+ */
+void ledInit(void);
 
-void ringBufferAdd(RingBuffer* rb, uint32_t timestamp, uint32_t moduleId, uint16_t errorCode)
-{
-	ASSERT(rb);
-	ErrorDescription error = { .timestamp = timestamp, .moduleId = moduleId, .errorCode = errorCode };
-	ringBufferAdd_(rb, error);
-}
+/**
+* @brief Set state for LED
+*
+* Set state for LED
+*/
+void ledSetState(bool state);
 
-ErrorDescription* ringBufferFetch(RingBuffer* rb)
-{
-	ASSERT(rb)
-	if (rb->head == rb->tail) return NULL;
-	ErrorDescription* error = &rb->errors[rb->head];
-	rb->head = (rb->head + 1) % RING_BUFFER_SIZE;
-	rb->count--;
-	return error;
-}
+/**
+* @brief LED de-initialization function
+*
+* Run this function to de-initialize LED (to switch to sleep mode, for example)
+*/
+void ledDeinit(void);
 
-size_t ringBufferCount(const RingBuffer* rb)
-{
-	ASSERT(rb)
-	return rb->count;
-}
-
-void ringBufferClear(RingBuffer* rb)
-{
-	ASSERT(rb);
-	rb->head = 0;
-	rb->tail = 0;
-	rb->count = 0;
-}
-
-uint32_t hash_string(const char* str)
-{
-	uint32_t hash = 5381;
-	char c;
-	while ((c = *str++))
-		hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
-	return hash;
-}

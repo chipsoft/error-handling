@@ -20,19 +20,32 @@
 /* Define MODULE_ID_MACROS macros */
 /* Macros MODULE_ID_MACROS should not be defined! We check this condition */
 #ifndef MODULE_ID
-#define MODULE_ID 0x0001U
+#define MODULE_ID (hash_string("motor.c"))
 #else
-#error MODULE_ID already defined. Check MODULE_ID in other files
+#error MODULE_ID already defined. Check MODULE_ID in other files!
 #endif
+
+#include "ErrorHandling.h"
+#include "error_handle.h"
+
+/*
+ * Define all error codes for LED module here
+ */
+enum ErrorCode
+{
+	ERROR_MOTOR_UNDEFINED_STATE = 0,
+	ERROR_MOTOR_NOT_INITIALIZED,
+	ERROR_MOTOR_IS_BROKEN,
+};
 
 void motorInit(void)
 {
-	
+
 }
 
 void motorRun(void)
 {
-	
+	errorAdd(0, MODULE_ID, (uint16_t)ERROR_MOTOR_IS_BROKEN);
 }
 
 void motorStop(void)

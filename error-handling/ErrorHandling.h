@@ -30,7 +30,7 @@
 struct ErrorDescription_
 {
 	uint32_t timestamp; /* Time when error is occur */
-	uint16_t moduleId; /* Module Id */
+	uint32_t moduleId;  /* Module Id */
 	uint16_t errorCode; /* Error code corresponding to the module */
 };
 
@@ -67,7 +67,7 @@ void ringBufferInit(RingBuffer* rb);
  * @param moduleId Module Id
  * @param errorCode Error code, that appear
  */
-void ringBufferAdd(RingBuffer* rb, uint32_t timestamp, uint16_t moduleId, uint16_t errorCode);
+void ringBufferAdd(RingBuffer* rb, uint32_t timestamp, uint32_t moduleId, uint16_t errorCode);
 
 /**
  * @brief Get error description from RingBuffer in queue order
@@ -76,7 +76,7 @@ void ringBufferAdd(RingBuffer* rb, uint32_t timestamp, uint16_t moduleId, uint16
  * @param rb Pointer to ring buffer structure
  * @return ErrorDescription* pointer to element. Return NULL, if ring buffer is empty
  */
-ErrorDescription* ringBufferGet(RingBuffer* rb);
+ErrorDescription* ringBufferFetch(RingBuffer* rb);
 
 /**
  * @brief Get number of elements in ring buffer
@@ -91,5 +91,14 @@ size_t ringBufferCount(const RingBuffer* rb);
  * @brief Clear ring buffer
  *
  * This function clear ring buffer
-  */
+ */
 void ringBufferClear(RingBuffer* rb);
+
+/**
+ * @brief Function to get hash value from string
+ *
+ * This function calculates hash value from string with djb2 algorithm
+ * @param str Pointer to string to hash
+ * @return uint32_t Return hash value of string
+ */
+uint32_t hash_string(const char* str);

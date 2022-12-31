@@ -24,6 +24,12 @@
     <ClCompile Include="motor.c">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="led.c">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="error_handle.c">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ErrorMacros_config.h">
@@ -36,6 +42,12 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="motor.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="led.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="error_handle.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

@@ -22,6 +22,9 @@
 
 #include "ErrorHandling.h"
 #include "ErrorMacros.h"
+#include "error_handle.h"
+#include "led.h"
+#include "motor.h"
 
 void handle_critical_error(void)
 {
@@ -53,11 +56,37 @@ static RingBuffer ringBuffer;
 
 int main(int argc, char** argv)
 {
-	ringBufferInit(&ringBuffer);
-	ErrorDescription* a = ringBufferGet(&ringBuffer);
-	ringBufferAdd(&ringBuffer, 1, 2, 3);
-	a = ringBufferGet(&ringBuffer);
-	a = ringBufferGet(&ringBuffer);
-	ASSERT(0)
+	/* Error module should initialize before any of modules */
+	errorInit();
+	/* Initialize all of modules */
+	ledInit();
+	motorInit();
+	/* Regular work */
+	ledSetState(1);
+	motorRun();
+	ledSetState(0);
+	motorStop();
+	/* Fetch error if it occur */
+	size_t error_count = errorCount();
+	if (error_count)
+	{
+		/* Print all of error */
+		printf("Found %d errors:\r\n", error_count);
+		for (size_t i = 0; i < error_count; ++i)
+		{
+			ErrorDescription* error_desc = errorFetch();
+			ASSERT(error_desc)
+			printf("Error #%d: timestamp = %d, module = %08X, code = %04X\r\n", i, error_desc->timestamp, error_desc->moduleId, error_desc->errorCode);
+		}
+	}
+	else
+	{
+		printf("No error found\r\n");
+	}
+	/* De-initialize all of modules */
+	ledDeinit();
+	motorDeinit();
+	/* Error module should de-initialize after all of modules */
+	errorDeinit();
 	return 0;
 }

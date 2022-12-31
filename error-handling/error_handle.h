@@ -17,61 +17,48 @@
  *   License along with Box.  If not, see <http://www.gnu.org/licenses/>.   *
  ****************************************************************************/
 
+#pragma once
+#include <stdint.h>
+
 #include "ErrorHandling.h"
-#include "ErrorMacros.h"
 
-static void ringBufferAdd_(RingBuffer* rb, ErrorDescription error)
-{
-	ASSERT(rb)
-	rb->errors[rb->tail] = error;
-	rb->tail = (rb->tail + 1) % RING_BUFFER_SIZE;
-	rb->count++;
-}
+/**
+* @brief Error module initialization function
+*
+* Run this function before using error handling
+*/
+void errorInit(void);
 
-void ringBufferInit(RingBuffer* rb)
-{
-	ASSERT(rb)
-	rb->head = 0;
-	rb->tail = 0;
-	rb->count = 0;
-}
+/**
+* @brief Add error to ring buffer
+*
+* Add error to ring buffer
+* @param timestamp Timestamp of error
+* @param moduleId Module ID of error (from MODULE_ID macros)
+* @param errorCode Error code within moduleId
+*/
+void errorAdd(uint32_t timestamp, uint32_t moduleId, uint16_t errorCode);
 
-void ringBufferAdd(RingBuffer* rb, uint32_t timestamp, uint32_t moduleId, uint16_t errorCode)
-{
-	ASSERT(rb);
-	ErrorDescription error = { .timestamp = timestamp, .moduleId = moduleId, .errorCode = errorCode };
-	ringBufferAdd_(rb, error);
-}
+/**
+* @brief Fetch error from ring buffer
+*
+* Fetch error from ring buffer
+* @return error Pointer to error description structure
+*/
+ErrorDescription* errorFetch(void);
 
-ErrorDescription* ringBufferFetch(RingBuffer* rb)
-{
-	ASSERT(rb)
-	if (rb->head == rb->tail) return NULL;
-	ErrorDescription* error = &rb->errors[rb->head];
-	rb->head = (rb->head + 1) % RING_BUFFER_SIZE;
-	rb->count--;
-	return error;
-}
+/**
+* @brief Get error count in ring buffer
+*
+* Get error count in ring buffer
+*/
+size_t errorCount(void);
 
-size_t ringBufferCount(const RingBuffer* rb)
-{
-	ASSERT(rb)
-	return rb->count;
-}
+/**
+* @brief Error module de-initialization function
+*
+* Run this function to de-initialize error handling (to switch to sleep mode, for example)
+*/
+void errorDeinit(void);
 
-void ringBufferClear(RingBuffer* rb)
-{
-	ASSERT(rb);
-	rb->head = 0;
-	rb->tail = 0;
-	rb->count = 0;
-}
 
-uint32_t hash_string(const char* str)
-{
-	uint32_t hash = 5381;
-	char c;
-	while ((c = *str++))
-		hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
-	return hash;
-}

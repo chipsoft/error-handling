@@ -17,61 +17,45 @@
  *   License along with Box.  If not, see <http://www.gnu.org/licenses/>.   *
  ****************************************************************************/
 
+ /* Define MODULE_ID_MACROS macros */
+ /* Macros MODULE_ID_MACROS should not be defined! We check this condition */
+#ifndef MODULE_ID
+#define MODULE_ID (hash_string("error_handle.c"))
+#else
+#error MODULE_ID already defined. Check MODULE_ID in other files!
+#endif
+
 #include "ErrorHandling.h"
-#include "ErrorMacros.h"
 
-static void ringBufferAdd_(RingBuffer* rb, ErrorDescription error)
+/* Ring buffer for error description list */
+static RingBuffer ringBufferErrorList;
+
+void errorInit(void)
 {
-	ASSERT(rb)
-	rb->errors[rb->tail] = error;
-	rb->tail = (rb->tail + 1) % RING_BUFFER_SIZE;
-	rb->count++;
+	/* Global ring buffer initialization for error description */
+	ringBufferInit(&ringBufferErrorList);
 }
 
-void ringBufferInit(RingBuffer* rb)
+void errorAdd(uint32_t timestamp, uint32_t moduleId, uint16_t errorCode)
 {
-	ASSERT(rb)
-	rb->head = 0;
-	rb->tail = 0;
-	rb->count = 0;
+	/* Add error description to global ring buffer initialization */
+	ringBufferAdd(&ringBufferErrorList, timestamp, moduleId, errorCode);
 }
 
-void ringBufferAdd(RingBuffer* rb, uint32_t timestamp, uint32_t moduleId, uint16_t errorCode)
+ErrorDescription* errorFetch(void)
 {
-	ASSERT(rb);
-	ErrorDescription error = { .timestamp = timestamp, .moduleId = moduleId, .errorCode = errorCode };
-	ringBufferAdd_(rb, error);
+	/* Fetch error description from global ring buffer */
+	return ringBufferFetch(&ringBufferErrorList);
 }
 
-ErrorDescription* ringBufferFetch(RingBuffer* rb)
+size_t errorCount(void)
 {
-	ASSERT(rb)
-	if (rb->head == rb->tail) return NULL;
-	ErrorDescription* error = &rb->errors[rb->head];
-	rb->head = (rb->head + 1) % RING_BUFFER_SIZE;
-	rb->count--;
-	return error;
+	return ringBufferCount(&ringBufferErrorList);
 }
 
-size_t ringBufferCount(const RingBuffer* rb)
+void errorDeinit(void)
 {
-	ASSERT(rb)
-	return rb->count;
+	
 }
 
-void ringBufferClear(RingBuffer* rb)
-{
-	ASSERT(rb);
-	rb->head = 0;
-	rb->tail = 0;
-	rb->count = 0;
-}
-
-uint32_t hash_string(const char* str)
-{
-	uint32_t hash = 5381;
-	char c;
-	while ((c = *str++))
-		hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
-	return hash;
-}
+#undef MODULE_ID
