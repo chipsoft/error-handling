@@ -2,6 +2,8 @@
 
 This repository presents my thoughts on adding error handling to embedded device applications with limited RAM, and limited display capabilities, but with the ability to communicate the device to the outside world via Bluetooth, WiFi, USB, etc.
 
+**Attention!** The described functions are not thread-safe. Therefore, to work with multiple threads, it is necessary to make all functions for working with the ring buffer thread-free (for example, using mutexes).
+
 Error handling examples are given in C with a test application in Visual Studio 2022. But they can easily be built with any other compiler for any target platform.
 
 Error handling is divided into two parts:
